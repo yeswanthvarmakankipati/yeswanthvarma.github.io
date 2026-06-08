@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeswanth Varma | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --accent: #4f8ef7;
+    --accent2: #7c3aed;
+    --text: #e8e8f0;
+    --muted: #888899;
+    --border: rgba(255,255,255,0.08);
+    --card: rgba(255,255,255,0.04);
+    --glow: rgba(79,142,247,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; transition: color 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+  .page { display: none; min-height: 100vh; padding-top: 80px; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  #home {
+    display: none;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding-top: 80px;
+    position: relative; overflow: hidden;
+  }
+  #home.active { display: flex; }
+
+  .home-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 50%, rgba(79,142,247,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 30%, rgba(124,58,237,0.1) 0%, transparent 70%);
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .home-content {
+    position: relative; z-index: 1;
+    max-width: 800px; padding: 0 48px; text-align: left;
+  }
+
+  .home-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; color: var(--accent);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .home-tag::before {
+    content: ''; display: block;
+    width: 40px; height: 1px; background: var(--accent);
+  }
+
+  .home-name {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .home-name span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .home-role {
+    font-size: 1.25rem; color: var(--muted);
+    margin-bottom: 32px; font-weight: 400;
+  }
+
+  .home-desc {
+    font-size: 1rem; color: var(--muted);
+    line-height: 1.7; max-width: 560px;
+    margin-bottom: 48px;
+  }
+
+  .home-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn {
+    padding: 14px 32px; border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.875rem; font-weight: 700;
+    letter-spacing: 0.05em; cursor: pointer;
+    transition: all 0.2s; border: none; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .home-stats {
+    position: absolute; right: 48px; bottom: 80px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .stat { text-align: right; }
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem; font-weight: 700; color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .section { max-width: 900px; margin: 0 auto; padding: 60px 48px; }
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; color: var(--accent);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-size: 2.5rem; font-weight: 800;
+    letter-spacing: -0.02em; margin-bottom: 48px;
+    line-height: 1.1;
+  }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .about-text p { color: var(--muted); line-height: 1.8; margin-bottom: 20px; font-size: 0.975rem; }
+  .about-text p strong { color: var(--text); }
+  .about-cards { display: flex; flex-direction: column; gap: 16px; }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px;
+    transition: border-color 0.2s;
+  }
+  .info-card:hover { border-color: rgba(79,142,247,0.3); }
+  .info-card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+  .info-card-value { font-size: 0.9rem; color: var(--text); font-weight: 600; }
+
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px; }
+  .skill-tag {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; color: var(--muted);
+    transition: all 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .projects-grid { display: flex; flex-direction: column; gap: 24px; }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .project-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0); transition: transform 0.3s;
+  }
+  .project-card:hover { border-color: rgba(79,142,247,0.3); transform: translateY(-4px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .project-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .project-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; padding: 4px 12px; border-radius: 20px;
+    background: rgba(79,142,247,0.1); color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+    white-space: nowrap;
+  }
+  .project-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; padding: 4px 10px; border-radius: 4px;
+    background: rgba(255,255,255,0.05); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .contact-info p { color: var(--muted); line-height: 1.8; margin-bottom: 32px; font-size: 0.975rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; text-decoration: none;
+    color: var(--text); transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateX(4px); }
+  .contact-link-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(79,142,247,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .contact-link-text { font-size: 0.875rem; }
+  .contact-link-label { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Space Mono', monospace; }
+  .form-input, .form-textarea {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.9rem;
+    transition: border-color 0.2s; outline: none; resize: vertical;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { min-height: 120px; }
+
+  footer {
+    text-align: center; padding: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 16px; }
+    .home-content { padding: 0 20px; }
+    .home-stats { display: none; }
+    .section { padding: 40px 20px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">&lt;YV /&gt;</div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">About</a></li>
+    <li><a onclick="showPage('projects')" id="nav-projects">Projects</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <div class="home-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="home-content">
+    <div class="home-tag">Available for opportunities</div>
+    <h1 class="home-name">
+      Kankipati<br><span>Yeswanth Varma</span>
+    </h1>
+    <p class="home-role">Full Stack Developer &amp; AI/ML Enthusiast</p>
+    <p class="home-desc">
+      MCA student passionate about building intelligent, user-facing applications. Combining deep learning expertise with web development skills to create impactful digital experiences.
+    </p>
+    <div class="home-btns">
+      <button class="btn btn-primary" onclick="showPage('projects')">View Projects →</button>
+      <button class="btn btn-outline" onclick="showPage('contact')">Get In Touch</button>
+    </div>
+  </div>
+  <div class="home-stats">
+    <div class="stat">
+      <div class="stat-num">82%</div>
+      <div class="stat-label">MCA Score</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1+</div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">ML Frameworks</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="about">
+  <div class="section">
+    <div class="section-tag">Who I Am</div>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm <strong>Yeswanth Varma</strong>, an MCA student at Nadimpalli Satyanarayana Raju Institute Of Technology, with a passion for building intelligent and impactful applications.</p>
+        <p>My journey spans <strong>deep learning and AI/ML</strong> — working with CNNs, TensorFlow, Keras and PyTorch — combined with a growing interest in <strong>full stack web development</strong>.</p>
+        <p>I completed my BSc in Mathematics, Physics & Computer Science, which gave me a strong analytical foundation. I'm currently working on a <strong>Monkeypox Detection system</strong> using deep learning as my major academic project.</p>
+        <p>I'm a quick learner, problem solver, and eager to contribute to real-world projects that make a difference.</p>
+        <div style="margin-top:32px">
+          <div class="section-tag" style="margin-bottom:16px">Tech Stack</div>
+          <div class="skills-grid">
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">TensorFlow</div>
+            <div class="skill-tag">Keras</div>
+            <div class="skill-tag">PyTorch</div>
+            <div class="skill-tag">NumPy</div>
+            <div class="skill-tag">Pandas</div>
+            <div class="skill-tag">Matplotlib</div>
+            <div class="skill-tag">Scikit-learn</div>
+            <div class="skill-tag">HTML / CSS</div>
+            <div class="skill-tag">JavaScript</div>
+            <div class="skill-tag">SQL</div>
+            <div class="skill-tag">Google Colab</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-cards">
+        <div class="info-card">
+          <div class="info-card-label">Status</div>
+          <div class="info-card-value">Pursuing MCA (2024 – 2026)</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Institution</div>
+          <div class="info-card-value">NSRIT, Andhra Pradesh</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Location</div>
+          <div class="info-card-value">India · Open to Relocation</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Focus Area</div>
+          <div class="info-card-value">Full Stack Dev + AI/ML</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Certification</div>
+          <div class="info-card-value">Python – Infosys Springboard (2025)</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Languages</div>
+          <div class="info-card-value">English · Telugu · Hindi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="page" id="projects">
+  <div class="section">
+    <div class="section-tag">What I've Built</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-header">
+          <div>
+            <div class="project-title">Monkeypox Detection Using Deep Learning</div>
+            <div style="color:var(--muted);font-size:0.8rem;margin-top:4px">Academic Project · 2024 – Present</div>
+          </div>
+          <div class="project-status">In Progress</div>
+        </div>
+        <p class="project-desc">
+          A CNN-based deep learning system to detect Monkeypox from medical images. The model performs image preprocessing — resizing, normalization, and augmentation — to improve generalization. Built using TensorFlow and Keras, with PyTorch experimentation for training. NumPy and Pandas handle dataset management, while Matplotlib visualizes training accuracy and loss curves. Currently working on improving model accuracy and adding a web-based prediction interface.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">TensorFlow</span>
+          <span class="project-tag">Keras</span>
+          <span class="project-tag">PyTorch</span>
+          <span class="project-tag">CNN</span>
+          <span class="project-tag">NumPy</span>
+          <span class="project-tag">Pandas</span>
+          <span class="project-tag">Matplotlib</span>
+          <span class="project-tag">Image Classification</span>
+        </div>
+      </div>
+      <div class="project-card" style="border-style: dashed; opacity: 0.6;">
+        <div class="project-header">
+          <div>
+            <div class="project-title">More Projects Coming Soon</div>
+            <div style="color:var(--muted);font-size:0.8rem;margin-top:4px">Currently building...</div>
+          </div>
+          <div class="project-status" style="background:rgba(124,58,237,0.1);color:#a78bfa;border-color:rgba(124,58,237,0.2)">Upcoming</div>
+        </div>
+        <p class="project-desc">Working on expanding my portfolio with full stack web projects and more AI/ML applications. Stay tuned!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="contact">
+  <div class="section">
+    <div class="section-tag">Let's Connect</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>I'm currently open to full stack developer and AI/ML roles. Whether you have an opportunity, a project idea, or just want to connect — feel free to reach out!</p>
+        <div class="contact-links">
+          <a href="mailto:yeswanthvarmakankipati@gmail.com" class="contact-link">
+            <div class="contact-link-icon">📧</div>
+            <div>
+              <div class="contact-link-label">Email</div>
+              <div class="contact-link-text">yeswanthvarmakankipati@gmail.com</div>
+            </div>
+          </a>
+          <a href="tel:+919063483747" class="contact-link">
+            <div class="contact-link-icon">📞</div>
+            <div>
+              <div class="contact-link-label">Phone</div>
+              <div class="contact-link-text">+91 9063483747</div>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/yeswanth-varma-kankipati-11432a3b7" target="_blank" class="contact-link">
+            <div class="contact-link-icon">💼</div>
+            <div>
+              <div class="contact-link-label">LinkedIn</div>
+              <div class="contact-link-text">yeswanth-varma-kankipati</div>
+            </div>
+          </a>
+          <div class="contact-link" style="cursor:default">
+            <div class="contact-link-icon">📍</div>
+            <div>
+              <div class="contact-link-label">Location</div>
+              <div class="contact-link-text">India · Open to Relocation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="contact-form">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" type="text" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" placeholder="Tell me about the opportunity or project..."></textarea>
+          </div>
+          <button class="btn btn-primary" style="align-self:flex-start" onclick="alert('Thank you! Please email directly at yeswanthvarmakankipati@gmail.com')">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Kankipati Yeswanth Varma · Built with passion · India</p>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
